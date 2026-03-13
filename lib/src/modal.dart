@@ -18,15 +18,14 @@ class Modal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (visible) {
-      return GestureDetector(
+    return Positioned.fill(
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
         onTap: onTap,
-        child: Container(
-          color: color.withOpacity(opacity),
+        child: ColoredBox(
+          color: visible ? color.withOpacity(opacity) : Colors.transparent,
         ),
-      );
-    } else {
-      return Container();
-    }
+      ),
+    );
   }
 }
