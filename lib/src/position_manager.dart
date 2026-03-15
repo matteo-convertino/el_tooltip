@@ -347,6 +347,36 @@ class PositionManager {
     return _topCenter();
   }
 
+  ToolTipElementsDisplay _clampToScreen(ToolTipElementsDisplay el) {
+    const margin = 8.0;
+
+    final clampedBubbleX = el.bubble.x
+        .clamp(
+          margin,
+          screenSize.w - el.bubble.w - margin,
+        )
+        .toDouble();
+
+    final clampedBubbleY = el.bubble.y
+        .clamp(
+          margin,
+          screenSize.h - el.bubble.h - margin,
+        )
+        .toDouble();
+
+    return ToolTipElementsDisplay(
+      bubble: ElementBox(
+        w: el.bubble.w,
+        h: el.bubble.h,
+        x: clampedBubbleX,
+        y: clampedBubbleY,
+      ),
+      arrow: el.arrow,
+      position: el.position,
+      radius: el.radius,
+    );
+  }
+
   /// Load the calculated tooltip position
   ToolTipElementsDisplay load({ElTooltipPosition? preferredPosition}) {
     ToolTipElementsDisplay elementPosition;
@@ -393,8 +423,10 @@ class PositionManager {
         break;
     }
 
-    return _fitsScreen(elementPosition)
+    final best = _fitsScreen(elementPosition)
         ? elementPosition
         : _firstAvailablePosition();
+
+    return _clampToScreen(best);
   }
 }
